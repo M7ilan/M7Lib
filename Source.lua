@@ -452,14 +452,16 @@ end
 
 function M7Lib:MakeWindow(WindowConfig)
 	local FirstTab = true
-	local Minimized = false
 	local Loaded = false
-	local UIHidden = false
+  local Minimized = WindowConfig.StartMinimized
+  local UIHidden = WindowConfig.StartHidden
 
 	WindowConfig = WindowConfig or {}
 	WindowConfig.Name = WindowConfig.Name or "M7 Library"
   WindowConfig.AnchorPoint = WindowConfig.AnchorPoint or Vector2.new(0, 1)
   WindowConfig.Position = WindowConfig.Position or UDim2.new(0, 25, 1, -25)
+  WindowConfig.StartMinimized = WindowConfig.StartMinimized or false
+  WindowConfig.StartHidden = WindowConfig.StartHidden or false
 	WindowConfig.ConfigFolder = WindowConfig.ConfigFolder or WindowConfig.Name
 	WindowConfig.SaveConfig = WindowConfig.SaveConfig or false
 	WindowConfig.HidePremium = WindowConfig.HidePremium or false
@@ -595,13 +597,6 @@ function M7Lib:MakeWindow(WindowConfig)
 		Size = UDim2.new(0, 620, 0, 350),
 		ClipsDescendants = true
 	}), {
-		--SetProps(MakeElement("Image", "rbxassetid://3523728077"), {
-		--	AnchorPoint = Vector2.new(0.5, 0.5),
-		--	Position = UDim2.new(0.5, 0, 0.5, 0),
-		--	Size = UDim2.new(1, 80, 1, 320),
-		--	ImageColor3 = Color3.fromRGB(33, 33, 33),
-		--	ImageTransparency = 0.7
-		--}),
 		SetChildren(SetProps(MakeElement("TFrame"), {
 			Size = UDim2.new(1, 0, 0, 50),
 			Name = "TopBar"
@@ -624,6 +619,21 @@ function M7Lib:MakeWindow(WindowConfig)
 		DragPoint,
 		WindowStuff
 	}), "Main")
+
+  if Minimized then
+    MainWindow.ClipsDescendants = true
+    WindowTopBarLine.Visible = false
+    MinimizeBtn.Ico.Image = "rbxassetid://7072720870"
+    MainWindow.Size = UDim2.new(0, WindowName.TextBounds.X + 140, 0, 50)
+    WindowStuff.Visible = false
+  else
+    MainWindow.ClipsDescendants = false
+    WindowTopBarLine.Visible = true
+    MinimizeBtn.Ico.Image = "rbxassetid://7072719338"
+    MainWindow.Size = UDim2.new(0, 620, 0, 350)
+    WindowStuff.Visible = true
+  end
+  MainWindow.Visible = not UIHidden
 
 	if WindowConfig.ShowIcon then
 		WindowName.Position = UDim2.new(0, 50, 0, -24)
@@ -708,9 +718,9 @@ function M7Lib:MakeWindow(WindowConfig)
 		TweenService:Create(LoadSequenceText, TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 0}):Play()
 		wait(2)
 		TweenService:Create(LoadSequenceText, TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 1}):Play()
-		MainWindow.Visible = true
-		LoadSequenceLogo:Destroy()
-		LoadSequenceText:Destroy()
+    MainWindow.Visible = not UIHidden
+    LoadSequenceLogo:Destroy()
+    LoadSequenceText:Destroy()
 	end 
 
 	if WindowConfig.IntroEnabled then
