@@ -99,11 +99,16 @@ local function AddDraggingFunctionality(DragPoint, Main)
 		UserInputService.InputChanged:Connect(function(Input)
 			if Input == DragInput and Dragging then
 				local Delta = Input.Position - MousePos
-				TweenService:Create(Main, TweenInfo.new(0.45, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Position  = UDim2.new(FramePos.X.Scale,FramePos.X.Offset + Delta.X, FramePos.Y.Scale, FramePos.Y.Offset + Delta.Y)}):Play()
+				Main.Position = UDim2.new(
+					FramePos.X.Scale,
+					FramePos.X.Offset + Delta.X,
+					FramePos.Y.Scale,
+					FramePos.Y.Offset + Delta.Y
+				)
 			end
 		end)
 	end)
-end   
+end
 
 local function Create(Name, Properties, Children)
 	local Object = Instance.new(Name)
@@ -633,14 +638,14 @@ function M7Lib:MakeWindow(WindowConfig)
 		UIHidden = true
 		M7Lib:MakeNotification({
 			Name = "Interface Hidden",
-			Content = "Tap RightShift to reopen the interface",
+			Content = "Tap LeftControl to reopen the interface",
 			Time = 5
 		})
 		WindowConfig.CloseCallback()
 	end)
 
 	AddConnection(UserInputService.InputBegan, function(Input)
-		if Input.KeyCode == Enum.KeyCode.RightShift and UIHidden then
+		if Input.KeyCode == Enum.KeyCode.LeftControl and UIHidden then
 			MainWindow.Visible = true
 		end
 	end)
