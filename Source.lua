@@ -458,6 +458,8 @@ function M7Lib:MakeWindow(WindowConfig)
 
 	WindowConfig = WindowConfig or {}
 	WindowConfig.Name = WindowConfig.Name or "M7 Library"
+  WindowConfig.AnchorPoint = WindowConfig.AnchorPoint or Vector2.new(0, 1)
+  WindowConfig.Position = WindowConfig.Position or UDim2.new(0, 25, 1, -25)
 	WindowConfig.ConfigFolder = WindowConfig.ConfigFolder or WindowConfig.Name
 	WindowConfig.SaveConfig = WindowConfig.SaveConfig or false
 	WindowConfig.HidePremium = WindowConfig.HidePremium or false
@@ -588,8 +590,9 @@ function M7Lib:MakeWindow(WindowConfig)
 
 	local MainWindow = AddThemeObject(SetChildren(SetProps(MakeElement("RoundFrame", Color3.fromRGB(255, 255, 255), 0, 10), {
 		Parent = M7,
-		Position = UDim2.new(0.5, -307, 0.5, -172),
-		Size = UDim2.new(0, 615, 0, 344),
+		Position = WindowConfig.Position,
+    AnchorPoint = WindowConfig.AnchorPoint,
+		Size = UDim2.new(0, 620, 0, 350),
 		ClipsDescendants = true
 	}), {
 		--SetProps(MakeElement("Image", "rbxassetid://3523728077"), {
@@ -645,14 +648,21 @@ function M7Lib:MakeWindow(WindowConfig)
 	end)
 
 	AddConnection(UserInputService.InputBegan, function(Input)
-		if Input.KeyCode == Enum.KeyCode.LeftControl and UIHidden then
-			MainWindow.Visible = true
+    if gameProcessedEvent then return end
+		if Input.KeyCode == Enum.KeyCode.LeftControl then
+			if UIHidden then
+        MainWindow.Visible = true
+        UIHidden = false
+      else
+        MainWindow.Visible = false
+        UIHidden = true
+      end
 		end
 	end)
 
 	AddConnection(MinimizeBtn.MouseButton1Up, function()
 		if Minimized then
-			TweenService:Create(MainWindow, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, 615, 0, 344)}):Play()
+			TweenService:Create(MainWindow, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, 620, 0, 350)}):Play()
 			MinimizeBtn.Ico.Image = "rbxassetid://7072719338"
 			wait(.02)
 			MainWindow.ClipsDescendants = false
