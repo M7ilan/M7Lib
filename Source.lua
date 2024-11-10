@@ -896,7 +896,7 @@ function M7Lib:MakeWindow(WindowConfig)
 				end)
 
 				AddConnection(Click.MouseButton1Up, function()
-					TweenService:Create(ButtonFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundColor3 = Color3.fromRGB(M7Lib.Themes[M7Lib.SelectedTheme].Second.R * 255 + 3, M7Lib.Themes[M7Lib.SelectedTheme].Second.G * 255 + 3, M7Lib.Themes[M7Lib.SelectedTheme].Second.B * 255 + 3)}):Play()
+					TweenService:Create(ButtonFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingStyle.Quint), {BackgroundColor3 = Color3.fromRGB(M7Lib.Themes[M7Lib.SelectedTheme].Second.R * 255 + 3, M7Lib.Themes[M7Lib.SelectedTheme].Second.G * 255 + 3, M7Lib.Themes[M7Lib.SelectedTheme].Second.B * 255 + 3)}):Play()
 					spawn(function()
 						ButtonConfig.Callback()
 					end)
@@ -1223,6 +1223,12 @@ function M7Lib:MakeWindow(WindowConfig)
 					end	
 					TweenService:Create(Dropdown.Buttons[Value],TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{BackgroundTransparency = 0}):Play()
 					TweenService:Create(Dropdown.Buttons[Value].Title,TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{TextTransparency = 0}):Play()
+					
+					Dropdown.Toggled = false
+					DropdownFrame.F.Line.Visible = Dropdown.Toggled
+					TweenService:Create(DropdownFrame.F.Ico, TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Rotation = 0}):Play()
+					TweenService:Create(DropdownFrame, TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = UDim2.new(1, 0, 0, 38)}):Play()
+
 					return DropdownConfig.Callback(Dropdown.Value)
 				end
 
